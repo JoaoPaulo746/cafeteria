@@ -1,1 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cafeteria Delícia</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #fdf6f0; color: #333; }
 
+    /* Tela de login */
+    #telaLogin {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #6b4226, #8b5e3c);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999;
+    }
+    #telaLogin form {
+      background: #fff; padding: 30px; border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      text-align: center; width: 300px;
+    }
+    #telaLogin h2 { margin-bottom: 20px; color: #6b4226; }
+    #telaLogin input {
+      width: 100%; padding: 10px; margin: 8px 0;
+      border: 1px solid #ccc; border-radius: 5px;
+    }
+    #telaLogin button {
+      background: #6b4226; color: white; border: none;
+      padding: 10px 20px; border-radius: 5px; cursor: pointer;
+      transition: background 0.3s;
+    }
+    #telaLogin button:hover { background: #8b5e3c; }
+
+    /* Conteúdo */
+    #conteudoSite { display: none; }
+
+    header {
+      background: linear-gradient(135deg, #6b4226, #8b5e3c);
+      color: white; padding: 30px 20px; text-align: center;
+    }
+    header img { height: 90px; margin-bottom: 10px; }
+
+    nav {
+      background: #c49a6c; display: flex; justify-content: center;
+      flex-wrap: wrap; padding: 15px; position: sticky; top: 0; z-index: 1000;
+    }
+    nav a {
+      margin: 0 15px; color: white; text-decoration: none;
+      font-weight: bold; transition: transform 0.2s;
+    }
+    nav a:hover { transform: scale(1.1); text-shadow: 0 0 5px #fff; }
+
+    section { padding: 40px 20px; max-width: 1100px; margin: auto; }
+    h2 { margin-bottom: 20px; color: #6b4226; border-left: 5px solid #c49a6c; padding-left: 10px; }
+
+    form input, form select {
+      width: 100%; padding: 10px; margin: 8px 0;
+      border: 1px solid #ccc; border-radius: 5px;
+    }
+    form button {
+      background: #6b4226; color: white; border: none;
+      padding: 10px 20px; border-radius: 5px; cursor: pointer;
+      transition: background 0.3s;
+    }
+    form button:hover { background: #8b5e3c; }
+
+    .produto {
+      border: 1px solid #ddd; border-radius: 10px;
+      padding: 15px; margin: 15px; display: inline-block;
+      width: 220px; text-align: center; background: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .produto img { width: 100%; border-radius: 8px; margin-bottom: 10px; }
+    .produto:hover { transform: translateY(-5px); }
+
+    .funcionario {
+      border: 1px solid #ccc; border-radius: 10px;
+      padding: 15px; margin: 15px; display: inline-block;
+      width: 250px; background: #fff;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .funcionario-destaque { border: 2px solid gold; background: #fffbea; }
+
+    #carrinho {
+      background: #fff; border-radius: 10px; padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    #listaCarrinho li { margin: 5px 0; }
+
+    .categoria { display: none; }
+    .categoria.ativa { display: flex; flex-wrap: wrap; justify-content: center; }
+
+    .botoes-categorias { text-align: center; margin-bottom: 20px; }
+    .botoes-categorias button {
+      margin: 5px; padding: 10px 15px; border: none;
+      border-radius: 5px; cursor: pointer;
+      background: #6b4226; color: white; transition: background 0.3s;
+    }
+    .botoes-categorias button:hover { background: #8b5e3c; }
+
+    footer {
+      background: #6b4226; color: white; text-align: center;
+      padding: 20px; margin-top: 40px;
+    }
+    footer a { color: #ffd700; text-decoration: none; margin: 0 10px; }
+  </style>
+</head>
+<body>
+
+<!-- Tela de Login -->
+<div id="telaLogin">
+  <form onsubmit="entrar(event)">
+    <h2>Bem-vindo à Cafeteria ☕</h2>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="senha" placeholder="Senha" required>
+    <button type="submit">Entrar</button>
+  </form>
+</div>
+
+<!-- Conteúdo do site -->
+<div id="conteudoSite">
+  <header>
+    <img src="https://copilot.microsoft.com/th/id/BCO.eb2fc457-7ae9-46dc-a7c8-9ac9760a3c47.png" alt="Logo Cafeteria Delícia">
+    <h1>Cafeteria Delícia</h1>
+    <p>O melhor café da cidade!</p>
+  </header>
+
+  <nav>
+    <a href="#cadastro">Cadastro Cliente</a>
+    <a href="#produtos">Produtos</a>
+    <a href="#funcionarios">Funcionários</a>
+    <a href="#carrinho">Carrinho</a>
+  </nav>
+
+  <section id="cadastro">
+    <h2>Cadastro de Cliente</h2>
+    <form>
+      <select>
+        <option>Pessoa Física</option>
+        <option>Pessoa Jurídica</option>
+      </select>
+      <input type="text" placeholder="Nome/Razão Social" required>
+      <input type="text" placeholder="CPF/CNPJ" required>
+      <input type="text" placeholder="CEP" required>
+      <button type="submit">Cadastrar</button>
+    </form>
+  </section>
+
+  <section id="produtos">
+    <h2>Produtos à Venda</h2>
+    <div class="botoes-categorias">
+      <button onclick="mostrarCategoria('salgados')">🥐 Salgados</button>
+      <button onclick="mostrarCategoria('doces')">🍰 Doces</button>
+      <button onclick="mostrarCategoria('bebidas')">🥤 Bebidas</button>
+    </div>
+
+    <!-- Salgados -->
+    <div id="salgados" class="categoria ativa">
+      <div class="produto">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY13cHEDlw-54hGLXEb3XrrJxEtcOgX7m6Jg&s" alt="">
+        <h3>Pão de Queijo</h3><p>R$ 4,00</p>
+        <button onclick="adicionarCarrinho('Pão de Queijo', 4)">Adicionar</button>
+      </div>
+      <div class="produto">
+        <img src="https://canaldareceita.com.br/wp-content/uploads/2024/09/COXINHA-FIT.jpg" alt="">
+        <h3>Coxinha</h3><p>R$ 6,00</p>
+        <button onclick="adicionarCarrinho('Coxinha', 6)">Adicionar</button>
+      </div>
+      <div class="produto">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9yMI9oSYjlm7Io-m7RaErWtMH9iUqvhppAg&s" alt="">
+        <h3>Empada de Frango</h3><p>R$ 7,00</p>
+        <button onclick="adicionarCarrinho('Empada de Frango', 7)">Adicionar</button>
+      </div>
+    </div>
+
+    <!-- Doces -->
+    <div id="doces" class="categoria">
+      <div class="produto">
+        <img src="https://s2-receitas.glbimg.com/j9WXDFp05XljuvekMlU2WR2VKfQ=/1280x0/filters:format(jpeg)/https://i.s3.glbimg.com/v1/AUTH_1f540e0b94d8437dbbc39d567a1dee68/internal_photos/bs/2022/1/N/aQD0fhQs2qW7qlFw0bTA/bolo-de-chocolate-facil.jpg" alt="">
+        <h3>Bolo de Chocolate</h3><p>R$ 12,00</p>
+        <button onclick="adicionarCarrinho('Bolo de Chocolate', 12)">Adicionar</button>
+      </div>
+      <div class="produto">
+        <img src="https://moinhoglobo.com.br/wp-content/uploads/2016/02/51-Brownie-1024x682.jpg" alt="">
+        <h3>Brownie</h3><p>R$ 8,00</p>
+        <button onclick="adicionarCarrinho('Brownie', 8)">Adicionar</button>
+      </div>
+      <div class="produto">
+        <img src="https://cms.cooknenjoy.com/wp-content/uploads/2021/10/torta-de-limao-01-1200x857.jpg" alt="">
+        <h3>Torta de Limão</h3><p>R$ 10,00</p>
+        <button onclick="adicionarCarrinho('Torta de Limão', 10)">Adicionar</button>
+      </div>
+    </div>
+
+    <!-- Bebidas -->
+    <div id="bebidas" class="categoria">
+      <div class="produto">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO-wynmadaSFDXwXeK6YMJK770_0XgoOfjRw&s" alt="">
+        <h3>Café Expresso</h3><p>R$ 5,00</p>
+        <button onclick="adicionarCarrinho('Café Expresso', 5)">Adicionar</button>
+      </div>
+      <div class="produto">
+        <img src="https://www.nescafe.com/nz/sites/default/files/2023-09/NESCAF%C3%89%20Cappuccino.jpg" alt="">
+        <h3>Cappuccino</h3><p>R$ 8,00</p>
+        <button onclick="adicionarCarrinho('Cappuccino', 8)">Adicionar</button>
+      </div>
+      <div class="produto">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfiWJHN6Ivg6hjIp4su2-vXlQ-wlDaxwiMRQ&s" alt="">
+        <h3>Suco Natural</h3><p>R$ 7,00</p>
+        <button onclick="adicionarCarrinho('Suco Natural', 7)">Adicionar</button>
+      </div>
+      <div class="produto">
+        <img src="https://image.tuasaude.com/media/article/bs/as/cha-gelado_73312.jpg" alt="">
+        <h3>Chá Gelado</h3><p>R$ 6,00</p>
+        <button onclick="adicionarCarrinho('Chá Gelado', 6)">Adicionar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Funcionários -->
+  <section id="funcionarios">
+    <h2>Nossa Equipe</h2>
+    <div class="funcionario">
+      <h3>Ana - Barista</h3>
+      <p>Especialista em Latte Art</p>
+    </div>
+    <div class="funcionario">
+      <h3>João - Atendente</h3>
+      <p>Atendimento rápido e simpático</p>
+    </div>
+    <div class="funcionario funcionario-destaque">
+      <h3>🌟 Funcionário do Mês: Maria</h3>
+      <p>Gerente - 10 anos de dedicação</p>
+    </div>
+  </section>
+
+  <!-- Carrinho -->
+  <section id="carrinho">
+    <h2>🛒 Carrinho</h2>
+    <ul id="listaCarrinho"></ul>
+    <p><strong>Total: R$ <span id="total">0</span></strong></p>
+    <button onclick="finalizarCompra()">Finalizar Compra</button>
+  </section>
+
+  <!-- Rodapé -->
+  <footer>
+    <p>&copy; 2025 Cafeteria Delícia - Todos os direitos reservados</p>
+    <p>📍 Arapongas - PR | 📞 (41) 99999-9999</p>
+    <p>
+      <a href="#">Instagram</a> | 
+      <a href="#">Facebook</a> | 
+      <a href="#">WhatsApp</a>
+    </p>
+  </footer>
+</div>
+
+<script>
+  let carrinho = [];
+  let total = 0;
+
+  function entrar(event) {
+    event.preventDefault();
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+    if(email && senha) {
+      document.getElementById("telaLogin").style.display = "none";
+      document.getElementById("conteudoSite").style.display = "block";
+    } else {
+      alert("Preencha todos os campos!");
+    }
+  }
+
+  function adicionarCarrinho(produto, preco) {
+    carrinho.push({produto, preco});
+    total += preco;
+    atualizarCarrinho();
+  }
+
+  function atualizarCarrinho() {
+    const lista = document.getElementById("listaCarrinho");
+    lista.innerHTML = "";
+    carrinho.forEach(item => {
+      let li = document.createElement("li");
+      li.textContent = `${item.produto} - R$ ${item.preco}`;
+      lista.appendChild(li);
+    });
+    document.getElementById("total").textContent = total;
+  }
+
+  function mostrarCategoria(categoria) {
+    document.querySelectorAll(".categoria").forEach(div => {
+      div.classList.remove("ativa");
+    });
+    document.getElementById(categoria).classList.add("ativa");
+  }
+
+  function finalizarCompra() {
+    if(carrinho.length === 0) {
+      alert("Seu carrinho está vazio!");
+    } else {
+      alert("Compra finalizada com sucesso! Obrigado pela preferência.");
+      carrinho = [];
+      total = 0;
+      atualizarCarrinho();
+    }
+  }
+</script>
+
+</body>
+</html>
